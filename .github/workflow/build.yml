@@ -1,0 +1,24 @@
+name: Nguyễn Quang Đại
+
+on:
+  push:
+    branchs:
+      - main
+
+jobs:
+  Build Python to APK:
+    run-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Packer install
+        run: |
+          sudo apt-get install -y python3 git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip3 install --user --upgrade buildozer
+          pip3 install --user --upgrade Cython==0.29.33
+
+      - name: Build with buildozer
+        run: |
+          export PATH=$PATH:~/.local/bin/
+          buildozer -v android debug
